@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Extract Pokémon name and capitalize first letter
+name=$(jq -r '.name' data.json | sed 's/.*/\u&/')
+
+# Extract the first Pokémon type and capitalize first letter
+type=$(jq -r '.types[0].type.name' data.json | sed 's/.*/\u&/')
+
+# Extract height (in decimeters)
+height=$(jq -r '.height' data.json)
+
+# Extract weight (in hectograms)
+weight=$(jq -r '.weight' data.json)
+
+# Convert height to meters (decimeters to meters)
+height_m=$(echo "scale=1; $height / 10" | bc)
+
+# Convert weight to kilograms (hectograms to kilograms)
+weight_kg=$(echo "scale=0; $weight / 10" | bc)
+
+# Output formatted string
+echo "${name} is of type ${type}, weighs ${weight_kg}kg, and is ${height_m}m tall."
